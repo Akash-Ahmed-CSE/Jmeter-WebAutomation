@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.2">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Group Transaction" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">5</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.delayedStart">false</boolProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+          <stringProp name="filename">D:/AMBS-Load-Test/data/1-100v2.csv</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="variableNames">BranchID,LoanOfficerID,GroupID,Date,UserID,Password</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
+          <stringProp name="delimiter">,</stringProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+        </CSVDataSet>
+        <hashTree/>
+        <com.googlecode.jmeter.plugins.webdriver.config.ChromeDriverConfig guiclass="com.googlecode.jmeter.plugins.webdriver.config.gui.ChromeDriverConfigGui" testclass="com.googlecode.jmeter.plugins.webdriver.config.ChromeDriverConfig" testname="jp@gc - Chrome Driver Config" enabled="true">
+          <boolProp name="WebDriverConfig.acceptinsecurecerts">true</boolProp>
+          <boolProp name="WebDriverConfig.reset_per_iteration">false</boolProp>
+          <stringProp name="WebDriverConfig.driver_path">D:\AMBS-Load-Test\chromedriver-win64\chromedriver.exe</stringProp>
+          <boolProp name="WebDriverConfig.dev_mode">false</boolProp>
+          <boolProp name="WebDriverConfig.headless">false</boolProp>
+          <boolProp name="WebDriverConfig.maximize_browser">true</boolProp>
+          <stringProp name="ChromeDriverConfig.additional_args">incognito</stringProp>
+          <stringProp name="ChromeDriverConfig.binary_path"></stringProp>
+          <stringProp name="WebDriverConfig.proxy_type">SYSTEM</stringProp>
+          <stringProp name="WebDriverConfig.proxy_pac_url"></stringProp>
+          <stringProp name="WebDriverConfig.http_host"></stringProp>
+          <intProp name="WebDriverConfig.http_port">8080</intProp>
+          <boolProp name="WebDriverConfig.use_http_for_all_protocols">true</boolProp>
+          <stringProp name="WebDriverConfig.https_host"></stringProp>
+          <intProp name="WebDriverConfig.https_port">8080</intProp>
+          <stringProp name="WebDriverConfig.ftp_host"></stringProp>
+          <intProp name="WebDriverConfig.ftp_port">8080</intProp>
+          <stringProp name="WebDriverConfig.socks_host"></stringProp>
+          <intProp name="WebDriverConfig.socks_port">8080</intProp>
+          <stringProp name="WebDriverConfig.no_proxy">localhost</stringProp>
+          <stringProp name="WebDriverConfig.custom_capabilites"></stringProp>
+        </com.googlecode.jmeter.plugins.webdriver.config.ChromeDriverConfig>
+        <hashTree/>
+        <com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler guiclass="com.googlecode.jmeter.plugins.webdriver.sampler.gui.WebDriverSamplerGui" testclass="com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler" testname="jp@gc - WebDriver Sampler" enabled="true">
+          <stringProp name="WebDriverSampler.script">import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+import java.lang.Thread;
+import org.openqa.selenium.JavascriptExecutor;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import javax.imageio.ImageIO;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import java.util.Formatter;
+import java.time.Duration;
+
+WDS.sampleResult.sampleStart();
+WebDriver driver = WDS.browser;
+
+String user = WDS.vars.get(&quot;UserID&quot;);
+String password = WDS.vars.get(&quot;Password&quot;);
+String branch = WDS.vars.get(&quot;BranchID&quot;);
+String loanOfficer = WDS.vars.get(&quot;LoanOfficerID&quot;);
+
+WDS.Log.info(&quot;User: &quot; + user + &quot; Password: &quot; + password + &quot; Branch: &quot; + branch);
+
+String baseUrl = &quot;http://192.168.100.77/Programs/P_GroupTransactionSheet.aspx&quot;;
+
+driver.get(baseUrl);
+
+driver.findElement(By.id(&quot;login_UserName&quot;)).sendKeys(new String[]{user});
+driver.findElement(By.id(&quot;login_Password&quot;)).sendKeys(new String[]{password});
+driver.findElement(By.id(&quot;login_LoginImageButton&quot;)).click();
+
+var wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+
+int size = 2;
+for (int i = 1; i &lt; size; i++) {
+
+  // Select Branch
+  wait.until(ExpectedConditions.presenceOfElementLocated(By.id(&quot;ctl00_ContentPlaceHolder1_ddlBranchId&quot;)));
+  Select ddlBranchId = new Select(driver.findElement(By.id(&quot;ctl00_ContentPlaceHolder1_ddlBranchId&quot;)));
+  wait.until(webDriver -&gt; ddlBranchId.getOptions().size() &gt;= 1);
+  WDS.Log.info(&quot;Branch loaded...&quot;);
+  
+  ddlBranchId.selectByValue(branch);
+
+  // Select Loan Officer
+  By lo = By.id(&quot;ctl00_ContentPlaceHolder1_ddlP_LoanOfficerId&quot;);
+  wait.until(ExpectedConditions.presenceOfElementLocated(lo));
+  try {
+  new WebDriverWait(driver, Duration.ofSeconds(1)).until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(lo))));
+  }catch(Exception x) {
+  	x.printStackTrace();
+  }
+  WDS.Log.info(&quot;Loan officer loaded...&quot;);
+  Select ddlPLoanOfficerId = new Select(driver.findElement(lo));
+  wait.until(webDriver -&gt; ddlPLoanOfficerId.getOptions().size() &gt;= 1);
+  ddlPLoanOfficerId.selectByValue(loanOfficer);
+
+  // Select Group
+  By group = By.id(&quot;ctl00_ContentPlaceHolder1_ddlP_GroupId&quot;);
+  wait.until(ExpectedConditions.presenceOfElementLocated(group));
+    try {
+  new WebDriverWait(driver, Duration.ofSeconds(1)).until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(group))));
+  }catch(Exception x) {
+  	x.printStackTrace();
+  }  
+  Select ddlPGroupId = new Select(driver.findElement(group));
+  wait.until(webDriver -&gt; ddlPGroupId.getOptions().size() &gt; 1);
+  WDS.Log.info(&quot;Group loaded...&quot;);
+
+  size = ddlPGroupId.getOptions().size();
+  WDS.Log.info(&quot;Total Options: &quot; + size + &quot; -&gt; Index: &quot; + i);
+  ddlPGroupId.selectByIndex(i);
+
+  // Try to load group transaction sheet
+  By groupTrnSheet = By.id(&quot;ctl00_ContentPlaceHolder1_gvGroupTransactionSheet&quot;);
+  wait.until(ExpectedConditions.presenceOfElementLocated(groupTrnSheet));
+  try {
+      wait.until(ExpectedConditions.presenceOfElementLocated(By.id(&quot;ctl00_mnuPageToolbarn1&quot;)));
+      var save = driver.findElement(By.id(&quot;ctl00_mnuPageToolbarn1&quot;));
+      save.click();
+  } catch (Exception ex) {
+      ex.printStackTrace();
+  }
+
+  try {
+      Alert alert = driver.switchTo().alert();
+      String alertText = alert.getText();
+
+      if (alertText.equals(&quot;Record saved successfully.&quot;)) {
+          alert.accept();
+          System.out.println(&quot;MSG : &quot; + alertText);
+      }
+  } catch (Exception ex) {
+      ex.printStackTrace();
+
+      try {
+          var msg = driver.findElement(By.id(&quot;ctl00_lblMessage&quot;)).getText();
+          WDS.Log.info(&quot;MSG : &quot; + msg);
+
+          if (msg.startsWith(&quot;Error: Loan collection amount can not be greater than outstanding amount &quot;)) {
+              for (int j = 2; ; j++) {
+                  var memberName = driver.findElement(By.id(&quot;ctl00_ContentPlaceHolder1_gvGroupTransactionSheet_ctl&quot; + (j &lt; 10 ? &quot;0&quot; : &quot;&quot;) + j + &quot;_lbView&quot;)).getText();
+
+                  if (msg.contains(memberName)) {
+                      var amount = msg.replace(&quot;Error: Loan collection amount can not be greater than outstanding amount &quot;, &quot;&quot;).split(&quot; &quot;)[0];
+                      js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvGroupTransactionSheet_ctl&quot; + (j &lt; 10 ? &quot;0&quot; : &quot;&quot;) + j + &quot;_txtRealizableAmount.setAttribute(&apos;value&apos;, &apos;&quot; + amount + &quot;&apos;);&quot;, new String[]{&quot;&quot;});
+                      WDS.Log.info(amount);
+                      break;
+                  }
+              }
+          } else if (msg.startsWith(&quot;Error: Minimum LCBU deposit is &quot;)) {
+              for (int j = 2; ; j++) {
+                  var memberName = driver.findElement(By.id(&quot;ctl00_ContentPlaceHolder1_gvGroupTransactionSheet_ctl&quot; + (j &lt; 10 ? &quot;0&quot; : &quot;&quot;) + j + &quot;_lbView&quot;)).getText();
+                  if (msg.contains(memberName)) {
+                      var amount = msg.replace(&quot;Error: Minimum LCBU deposit is &quot;, &quot;&quot;).split(&quot; &quot;)[0];
+                      js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvGroupTransactionSheet_ctl&quot; + (j &lt; 10 ? &quot;0&quot; : &quot;&quot;) + j + &quot;_txtSavingsMinimumDeposit.setAttribute(&apos;value&apos;, &apos;&quot; + amount + &quot;&apos;);&quot;, new String[]{&quot;&quot;});
+
+                      WDS.Log.info(amount);
+                      break;
+                  }
+              }
+          } else if (msg.startsWith(&quot;Error: Please enter OR number&quot;)) {
+              js.executeScript(&quot;ctl00_ContentPlaceHolder1_txtOrNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+              js.executeScript(&quot;ctl00_ContentPlaceHolder1_txtArNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+          } else {
+              WDS.sampleResult.setResponseMessage(msg);
+              WDS.sampleResult.setSuccessful(false);
+              break;
+          }
+      } catch (Exception x) {
+          try {
+              Thread.sleep(10);
+          } catch (InterruptedException e) {
+              e.printStackTrace();
+          }
+          x.printStackTrace();
+      }
+  }
+}
+
+WDS.browser.close();
+WDS.Log.info(&quot;Group Transaction operation done!&quot;);
+WDS.sampleResult.sampleEnd();</stringProp>
+          <stringProp name="WebDriverSampler.parameters"></stringProp>
+          <stringProp name="WebDriverSampler.language">groovy</stringProp>
+        </com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.2">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Process Journal" enabled="false">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.delayedStart">false</boolProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+          <stringProp name="filename">D:/Projects/Jmeter/PJ_v1.csv</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="variableNames">BranchID,UserID,Password</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
+          <stringProp name="delimiter">,</stringProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+        </CSVDataSet>
+        <hashTree/>
+        <com.googlecode.jmeter.plugins.webdriver.config.ChromeDriverConfig guiclass="com.googlecode.jmeter.plugins.webdriver.config.gui.ChromeDriverConfigGui" testclass="com.googlecode.jmeter.plugins.webdriver.config.ChromeDriverConfig" testname="jp@gc - Chrome Driver Config" enabled="true">
+          <boolProp name="WebDriverConfig.acceptinsecurecerts">true</boolProp>
+          <boolProp name="WebDriverConfig.reset_per_iteration">false</boolProp>
+          <stringProp name="WebDriverConfig.driver_path">D:\Projects\Jmeter\Load-Test\AMBS-Load-Test\chromedriver-win64\chromedriver.exe</stringProp>
+          <boolProp name="WebDriverConfig.dev_mode">false</boolProp>
+          <boolProp name="WebDriverConfig.headless">false</boolProp>
+          <boolProp name="WebDriverConfig.maximize_browser">true</boolProp>
+          <stringProp name="ChromeDriverConfig.additional_args">incognito</stringProp>
+          <stringProp name="ChromeDriverConfig.binary_path"></stringProp>
+          <stringProp name="WebDriverConfig.proxy_type">SYSTEM</stringProp>
+          <stringProp name="WebDriverConfig.proxy_pac_url"></stringProp>
+          <stringProp name="WebDriverConfig.http_host"></stringProp>
+          <intProp name="WebDriverConfig.http_port">8080</intProp>
+          <boolProp name="WebDriverConfig.use_http_for_all_protocols">true</boolProp>
+          <stringProp name="WebDriverConfig.https_host"></stringProp>
+          <intProp name="WebDriverConfig.https_port">8080</intProp>
+          <stringProp name="WebDriverConfig.ftp_host"></stringProp>
+          <intProp name="WebDriverConfig.ftp_port">8080</intProp>
+          <stringProp name="WebDriverConfig.socks_host"></stringProp>
+          <intProp name="WebDriverConfig.socks_port">8080</intProp>
+          <stringProp name="WebDriverConfig.no_proxy">localhost</stringProp>
+          <stringProp name="WebDriverConfig.custom_capabilites"></stringProp>
+        </com.googlecode.jmeter.plugins.webdriver.config.ChromeDriverConfig>
+        <hashTree/>
+        <com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler guiclass="com.googlecode.jmeter.plugins.webdriver.sampler.gui.WebDriverSamplerGui" testclass="com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler" testname="jp@gc - WebDriver Sampler" enabled="true">
+          <stringProp name="WebDriverSampler.script">import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.time.Duration;
+import java.util.Base64;
+
+WDS.sampleResult.sampleStart()
+WebDriver driver = WDS.browser;
+var js = (JavascriptExecutor) driver;
+var logger = WDS.Log;
+
+//String user = &quot;admin&quot;;//WDS.vars.get(&quot;UserID&quot;);
+//String password = &quot;Test@123&quot;;
+//String branch = &quot;165&quot;;
+
+String user = WDS.vars.get(&quot;UserID&quot;);
+String password = WDS.vars.get(&quot;Password&quot;);
+String branch = WDS.vars.get(&quot;BranchID&quot;);
+
+
+WDS.Log.info(&quot;User: &quot; + user + &quot; Password: &quot; + password + &quot; Branch: &quot; + branch);
+
+String baseUrl = &quot;https://192.168.97.56:1107//Programs/P_ProcessJournal.aspx?&quot;;
+
+driver.get(baseUrl);
+Thread.sleep(3000);
+
+
+
+driver.findElement(By.id(&quot;login_UserName&quot;)).sendKeys(new String[]{user});
+driver.findElement(By.id(&quot;login_Password&quot;)).sendKeys(new String[]{password});
+driver.findElement(By.id(&quot;login_LoginImageButton&quot;)).click();
+
+var wait = new WebDriverWait(driver, Duration.ofSeconds(1));
+
+Thread.sleep(3000);
+//Select Branch
+wait.until(ExpectedConditions.presenceOfElementLocated(By.id(&quot;ctl00_ContentPlaceHolder1_ddlBranchId&quot;)));
+Select ddlBranchId = new Select(driver.findElement(By.id(&quot;ctl00_ContentPlaceHolder1_ddlBranchId&quot;)));
+wait.until(webDriver -&gt; ddlBranchId.getOptions().size() &gt; 1);
+ddlBranchId.selectByValue(branch);
+Thread.sleep(3000);
+		
+//Refresh	
+driver.findElement(By.xpath(&quot;//a[@href=\&quot;javascript:commonService.doPostBack(&apos;REFRESH&apos;);\&quot;]&quot;)).click();
+Thread.sleep(3000);
+				
+//Check Message
+wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(&quot;#ctl00_lblMessage&quot;)));
+String elementText = driver.findElement(By.cssSelector(&quot;#ctl00_lblMessage&quot;)).getText()
+	if(elementText.startsWith(&quot;Error: User&quot;) || elementText.startsWith(&quot;No journal pending for processing&quot;)){
+		  Thread.sleep(1000);
+            driver.quit();
+		     }
+		else{			 
+		  //Click Authorize ALL
+            driver.findElement(By.xpath(&quot;//a[normalize-space()=&apos;Authorize All&apos;]&quot;)).click();
+            System.out.println(&quot;Authorize All&quot;);
+            Thread.sleep(2000);
+
+            //Click Process
+            driver.findElement(By.xpath(&quot;//a[@href=\&quot;javascript:commonService.doPostBack(&apos;ADD&apos;);\&quot;]&quot;)).click();
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(&quot;#ctl00_lblMessage&quot;)));
+            driver.quit();
+		  }	
+WDS.Log.info(&quot;Process Journal done!&quot;);
+WDS.sampleResult.sampleEnd();
+
+/////EnD///</stringProp>
+          <stringProp name="WebDriverSampler.parameters"></stringProp>
+          <stringProp name="WebDriverSampler.language">groovy</stringProp>
+        </com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Loan Account" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">2</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.delayedStart">false</boolProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+          <stringProp name="filename">D:/Projects/Jmeter/LD_v140.csv</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="variableNames">BranchID,LoanOfficerID,GroupID,MemberID,DisburseDate,FirstInstallmentDate,PrincipalAmount,LAF,UserID,Password</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
+          <stringProp name="delimiter">,</stringProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+        </CSVDataSet>
+        <hashTree/>
+        <com.googlecode.jmeter.plugins.webdriver.config.ChromeDriverConfig guiclass="com.googlecode.jmeter.plugins.webdriver.config.gui.ChromeDriverConfigGui" testclass="com.googlecode.jmeter.plugins.webdriver.config.ChromeDriverConfig" testname="jp@gc - Chrome Driver Config" enabled="true">
+          <boolProp name="WebDriverConfig.acceptinsecurecerts">true</boolProp>
+          <boolProp name="WebDriverConfig.reset_per_iteration">false</boolProp>
+          <stringProp name="WebDriverConfig.driver_path">D:\Projects\Jmeter\Load-Test\AMBS-Load-Test\chromedriver-win64\chromedriver.exe</stringProp>
+          <boolProp name="WebDriverConfig.dev_mode">false</boolProp>
+          <boolProp name="WebDriverConfig.headless">false</boolProp>
+          <boolProp name="WebDriverConfig.maximize_browser">true</boolProp>
+          <stringProp name="ChromeDriverConfig.additional_args">incognito</stringProp>
+          <stringProp name="ChromeDriverConfig.binary_path"></stringProp>
+          <stringProp name="WebDriverConfig.proxy_type">SYSTEM</stringProp>
+          <stringProp name="WebDriverConfig.proxy_pac_url"></stringProp>
+          <stringProp name="WebDriverConfig.http_host"></stringProp>
+          <intProp name="WebDriverConfig.http_port">8080</intProp>
+          <boolProp name="WebDriverConfig.use_http_for_all_protocols">true</boolProp>
+          <stringProp name="WebDriverConfig.https_host"></stringProp>
+          <intProp name="WebDriverConfig.https_port">8080</intProp>
+          <stringProp name="WebDriverConfig.ftp_host"></stringProp>
+          <intProp name="WebDriverConfig.ftp_port">8080</intProp>
+          <stringProp name="WebDriverConfig.socks_host"></stringProp>
+          <intProp name="WebDriverConfig.socks_port">8080</intProp>
+          <stringProp name="WebDriverConfig.no_proxy">localhost</stringProp>
+          <stringProp name="WebDriverConfig.custom_capabilites"></stringProp>
+        </com.googlecode.jmeter.plugins.webdriver.config.ChromeDriverConfig>
+        <hashTree/>
+        <com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler guiclass="com.googlecode.jmeter.plugins.webdriver.sampler.gui.WebDriverSamplerGui" testclass="com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler" testname="jp@gc - WebDriver Sampler" enabled="true">
+          <stringProp name="WebDriverSampler.script">import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.time.Duration;
+import java.util.Base64;
+
+WDS.sampleResult.sampleStart()
+WebDriver driver = WDS.browser;
+var js = (JavascriptExecutor) driver;
+var logger = WDS.Log;
+
+//String user = &quot;admin&quot;;//WDS.vars.get(&quot;UserID&quot;);
+//String password = &quot;Test@123&quot;;
+//String branch = &quot;165&quot;;
+
+String user = WDS.vars.get(&quot;UserID&quot;);
+String password = WDS.vars.get(&quot;Password&quot;);
+String branchId = WDS.vars.get(&quot;BranchID&quot;);
+String loanOfficerId = WDS.vars.get(&quot;LoanOfficerID&quot;);
+String groupId = WDS.vars.get(&quot;GroupID&quot;);
+String memberId = WDS.vars.get(&quot;MemberID&quot;);
+String disburseDate = WDS.vars.get(&quot;DisburseDate&quot;);
+String firstInstallmentDate = WDS.vars.get(&quot;FirstInstallmentDate&quot;);
+String principalAmount = WDS.vars.get(&quot;PrincipalAmount&quot;);
+String laf = WDS.vars.get(&quot;LAF&quot;);
+
+//WDS.Log.info(&quot;User: &quot; + user + &quot; Password: &quot; + password + &quot; Branch: &quot; + branch);
+
+String baseUrl = &quot;http://192.168.100.78/Programs/P_LoanAccountAdd.aspx&quot;;
+
+driver.get(baseUrl);
+Thread.sleep(3000);
+
+
+
+driver.findElement(By.id(&quot;login_UserName&quot;)).sendKeys(new String[]{user});
+driver.findElement(By.id(&quot;login_Password&quot;)).sendKeys(new String[]{password});
+driver.findElement(By.id(&quot;login_LoginImageButton&quot;)).click();
+
+var wait = new WebDriverWait(driver, Duration.ofSeconds(1));
+Thread.sleep(1000);
+ try {
+            logger.info(&quot;Starting loan disbursement&quot;);
+            // Check if Branch loaded
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.id(&quot;ddlBranchId&quot;)));
+            Select ddlBranchId = new Select(driver.findElement(By.id(&quot;ddlBranchId&quot;)));
+            wait.until(webDriver -&gt; ddlBranchId.getOptions().size() &gt;= 1);
+            ddlBranchId.selectByValue(branchId);
+            Thread.sleep(500);
+
+            // Select Loan Officer
+            logger.info(&quot;Setting Loan Officer ID...&quot;);
+            By lo = By.id(&quot;ddlP_LoanOfficerId&quot;);
+            wait.until(ExpectedConditions.presenceOfElementLocated(lo));
+            try {
+                new WebDriverWait(driver, Duration.ofMillis(100)).until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(lo))));
+            } catch (Exception lx) {
+                logger.error(lx.getMessage());
+            }
+            Select ddlPLoanOfficerId = new Select(driver.findElement(lo));
+            wait.until(webDriver -&gt; ddlPLoanOfficerId.getOptions().size() &gt;= 1);
+            ddlPLoanOfficerId.selectByValue(loanOfficerId);
+            Thread.sleep(500);
+
+            // Select Group
+            logger.info(&quot;Setting Group...&quot;);
+            By group = By.id(&quot;ddlP_GroupId&quot;);
+            wait.until(ExpectedConditions.presenceOfElementLocated(group));
+            try {
+                new WebDriverWait(driver, Duration.ofMillis(100)).until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(group))));
+            } catch (Exception gx) {
+                logger.error(gx.getMessage());
+            }
+            Select ddlPGroupId = new Select(driver.findElement(group));
+            wait.until(webDriver -&gt; ddlPGroupId.getOptions().size() &gt;= 1);
+            ddlPGroupId.selectByValue(groupId);
+            Thread.sleep(500);
+
+            // Select Member
+            logger.info(&quot;Setting Member...&quot;);
+            By member = By.id(&quot;ddlP_MemberId&quot;);
+            wait.until(ExpectedConditions.presenceOfElementLocated(member));
+            try {
+                new WebDriverWait(driver, Duration.ofMillis(100)).until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(member))));
+            } catch (Exception gx) {
+                logger.error(gx.getMessage());
+            }
+            Select ddlPMemberId = new Select(driver.findElement(member));
+            wait.until(webDriver -&gt; ddlPMemberId.getOptions().size() &gt;= 1);
+            ddlPMemberId.selectByValue(memberId);
+            Thread.sleep(500);
+
+
+            // Disburse Date
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_txtDisbursedDate&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+//                    ele.sendKeys(new String[]{disburseDate});
+                    js.executeScript(&quot;ctl00_ContentPlaceHolder1_txtDisbursedDate.setAttribute(&apos;value&apos;, &apos;&quot; + disburseDate + &quot;&apos;);&quot;, new String[]{&quot;&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                logger.error(&quot;Error when set disburse date!&quot;, e);
+                js.executeScript(&quot;ctl00_ContentPlaceHolder1_txtDisbursedDate.setAttribute(&apos;value&apos;, &apos;&quot; + disburseDate + &quot;&apos;);&quot;, new String[]{&quot;&quot;});
+            }
+
+
+            // select scheme
+            logger.info(&quot;Setting Scheme...&quot;);
+            By scheme = By.id(&quot;ctl00_ContentPlaceHolder1_ddlP_SchemeId&quot;);
+            wait.until(ExpectedConditions.presenceOfElementLocated(scheme));
+            try {
+                new WebDriverWait(driver, Duration.ofMillis(100)).until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(scheme))));
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+            Select ddlPSchemeId = new Select(driver.findElement(scheme));
+            wait.until(webDriver -&gt; ddlPSchemeId.getOptions().size() &gt;= 1);
+            ddlPSchemeId.selectByIndex(1); // todo:
+            Thread.sleep(500);
+
+            try {
+                By accountId = By.id(&quot;ctl00_ContentPlaceHolder1_ddlA_AccountId&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(accountId));
+                Select ddlAccountId = new Select(driver.findElement(accountId));
+                wait.until(webDriver -&gt; ddlAccountId.getOptions().size() &gt;= 1);
+                ddlAccountId.selectByIndex(1);
+            } catch (Exception e) {
+                logger.error(&quot;Error when set account id!&quot;, e);
+            }
+
+            // Principal Amount
+            try {
+                Thread.sleep(2000);
+                By txt = By.id(&quot;txtPrincipalAmount&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                driver.findElement(txt).sendKeys(principalAmount);
+                driver.findElement(txt).sendKeys(Keys.TAB);
+                var txtTotDis = driver.findElement(By.id(&quot;ctl00_ContentPlaceHolder1_txtTotalDisbursedAmount&quot;));
+                wait.until(webDriver -&gt; txtTotDis.getAttribute(&quot;value&quot;).length() != 0);
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                try {
+                    logger.warn(&quot;Setting principal amount via JS!&quot;);
+                    js.executeScript(&quot;txtPrincipalAmount.setAttribute(&apos;value&apos;, &apos;&quot; + principalAmount + &quot;&apos;);&quot;, new String[]{&quot;&quot;});
+                } catch (Exception jx) {
+                    logger.error(&quot;Error when set principal amount!&quot;, jx);
+                }
+            }
+
+            //Installment-----
+            logger.info(&quot;Setting Installment...&quot;);
+            By Installment = By.id(&quot;ctl00_ContentPlaceHolder1_ddlP_InstallmentType&quot;);
+            wait.until(ExpectedConditions.presenceOfElementLocated(Installment));
+            try {
+                new WebDriverWait(driver, Duration.ofMillis(500)).until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(Installment))));
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+            Select ddlPInstallmentId = new Select(driver.findElement(Installment));
+            wait.until(webDriver -&gt; ddlPInstallmentId.getOptions().size() &gt;= 1);
+            ddlPInstallmentId.selectByIndex(1); // todo:
+            Thread.sleep(2500);
+
+            try {
+                By GracePeriod = By.id(&quot;ctl00_ContentPlaceHolder1_ddlP_GracePeriod&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(GracePeriod));
+            } catch (Exception e) {
+                logger.error(&quot;Error ddlGracePeriod id!&quot;, e);
+            }
+
+
+            // LAF
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_txtLafNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{laf});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                logger.error(&quot;Error when set laf!&quot;, e);
+                try {
+                    js.executeScript(&quot;ctl00_ContentPlaceHolder1_txtLafNumber.setAttribute(&apos;value&apos;, &apos;&quot; + laf + &quot;&apos;);&quot;, new String[]{&quot;&quot;});
+                } catch (Exception jx) {
+                    logger.error(&quot;Error when set laf via JS!&quot;, jx);
+                }
+            }
+
+
+            // OR Number
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_txtOrNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                js.executeScript(&quot;ctl00_ContentPlaceHolder1_txtOrNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // AR Number
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_txtArNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                js.executeScript(&quot;ctl00_ContentPlaceHolder1_txtArNumber.setAttribute(&apos;value&apos;, &apos;20000&apos;);&quot;, new String[]{&quot;&quot;});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+//            // Check Number
+//            try {
+//                By txtCheckNo = By.id(&quot;ctl00_ContentPlaceHolder1_txtChequeNumber&quot;);
+//                wait.until(ExpectedConditions.presenceOfElementLocated(txtCheckNo));
+//                var ele = driver.findElement(txtCheckNo);
+//                if (ele.isEnabled()) {
+//                    ele.sendKeys(new String[]{&quot;123&quot;});
+//                    ele.sendKeys(Keys.TAB);
+//                }
+//            } catch (Exception e) {
+//                logger.error(&quot;Error when set txtChequeNo!&quot;, e);
+//                try {
+//                    js.executeScript(&quot;ctl00_ContentPlaceHolder1_txtChequeNumber.setAttribute(&apos;value&apos;, &apos;123&apos;);&quot;, new String[]{&quot;&quot;});
+//                } catch (Exception jx) {
+//                    logger.error(&quot;Error when set laf via JS!&quot;, jx);
+//                }
+//            }
+
+
+            String base64Photo = &quot;&quot;;
+
+            try {
+                BufferedImage photo = ImageIO.read(new File(&quot;D:\\nature.jpg&quot;));
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                ImageIO.write(photo, &quot;jpg&quot;, bytes);
+                base64Photo = Base64.getEncoder().encodeToString(bytes.toByteArray());
+
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_hdnImage&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                js.executeScript(&quot;ctl00_ContentPlaceHolder1_hdnImage.setAttribute(&apos;value&apos;, &apos;&quot; + base64Photo + &quot;&apos;);&quot;, new String[]{&quot;&quot;});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Basic Life Insurance Fund
+            try {
+                logger.info(&quot;Setting OR for BLIP...&quot;);
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl04_txtOtherFeeOrNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                logger.error(&quot;Error when set BLIP OR number!&quot;, e);
+                try {
+                    js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl04_txtOtherFeeOrNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                } catch (Exception jx) {
+                    logger.error(&quot;Error JS!&quot;, e);
+                }
+            }
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl04_txtOtherFeeArNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                try {
+                    js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl04_txtOtherFeeArNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                } catch (Exception jx) {
+                    logger.error(&quot;Error JS!&quot;, e);
+                }
+            }
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl04_txtOtherFeePolicyNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                try {
+                    js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl04_txtOtherFeePolicyNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                } catch (Exception jx) {
+                    logger.error(&quot;Error JS!&quot;, jx);
+                }
+            }
+
+            // Credit Life Insurance
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl05_txtOtherFeeOrNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+//                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl05_txtOtherFeeOrNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+//                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl05_txtOtherFeeArNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+//                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl05_txtOtherFeeArNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+//                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl05_txtOtherFeePolicyNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+//                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl05_txtOtherFeePolicyNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+//                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Hospitalization Care Assistance (HCA) - Premium
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl06_txtOtherFeeOrNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+//                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl06_txtOtherFeeOrNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl06_txtOtherFeeArNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+//                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl06_txtOtherFeeArNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl06_txtOtherFeePolicyNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl06_txtOtherFeePolicyNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+            }
+
+            // Retirement Savings Fund
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl07_txtOtherFeeOrNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl07_txtOtherFeeOrNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+            }
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl07_txtOtherFeeArNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+//                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl07_txtOtherFeeArNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl07_txtOtherFeePolicyNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+//                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl07_txtOtherFeePolicyNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Verification Fee
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl08_txtOtherFeeOrNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+//                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl08_txtOtherFeeOrNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl08_txtOtherFeeArNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+//                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl08_txtOtherFeeArNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl08_txtOtherFeePolicyNumber&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+//                js.executeScript(&quot;ctl00_ContentPlaceHolder1_gvOtherFees_ctl08_txtOtherFeePolicyNumber.setAttribute(&apos;value&apos;, &apos;1&apos;);&quot;, new String[]{&quot;&quot;});
+
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+                    ele.sendKeys(new String[]{&quot;1&quot;});
+                    ele.sendKeys(Keys.TAB);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // Other fees
+
+
+
+
+            // monthly income
+            try {
+                By txt = By.id(&quot;ctl00_ContentPlaceHolder1_txtMonthlyIncomeAmount&quot;);
+                wait.until(ExpectedConditions.presenceOfElementLocated(txt));
+                var ele = driver.findElement(txt);
+                if (ele.isEnabled()) {
+//                    ele.sendKeys(new String[]{&quot;20000&quot;});
+//                    ele.sendKeys(Keys.TAB);
+                    js.executeScript(&quot;ctl00_ContentPlaceHolder1_txtMonthlyIncomeAmount.setAttribute(&apos;value&apos;, &apos;20000&apos;);&quot;, new String[]{&quot;&quot;});
+                }
+            } catch (Exception e) {
+                logger.error(&quot;Error when set monthly income!&quot;, e);
+                try {
+                    js.executeScript(&quot;ctl00_ContentPlaceHolder1_txtMonthlyIncomeAmount.setAttribute(&apos;value&apos;, &apos;20000&apos;);&quot;, new String[]{&quot;&quot;});
+                } catch (Exception jx) {
+                    logger.error(&quot;Error when set monthly income amount!&quot;, jx);
+                }
+            }
+
+
+
+            try {
+                logger.info(&quot;Disbursing loan for member: &quot; + memberId);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.id(&quot;ctl00_mnuPageToolbarn1&quot;)));
+                var save = driver.findElement(By.id(&quot;ctl00_mnuPageToolbarn1&quot;));
+                save.click();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        } catch (
+                Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+        try {
+            logger.info(&quot;Analyzing loan disbursement for member: &quot; + memberId);
+            Alert alert = driver.switchTo().alert();
+            String alertText = alert.getText();
+            logger.info(&quot;MSG : &quot; + alertText);
+
+            if (alertText.equals(&quot;Record Saved Successfully.&quot;)) {
+                alert.accept();
+//                WDS.sampleResult.setResponseMessage(alertText + &quot;(ID:&quot; + WDS.vars.get(&quot;MemberID&quot;) + &quot;)&quot;);
+//                WDS.sampleResult.setSuccessful(true);
+            } else {
+//                WDS.sampleResult.setResponseMessage(msg + &quot;(ID:&quot; + WDS.vars.get(&quot;MemberID&quot;) + &quot;)&quot;);
+//                WDS.sampleResult.setSuccessful(false);
+//                break;
+            }
+        } catch (
+                Exception ex) {
+            try {
+                var msg = driver.findElement(By.id(&quot;ctl00_lblMessage&quot;)).getText();
+                logger.error(&quot;MSG : &quot; + msg);
+
+                if (msg.startsWith(&quot;Error: Duplicate LAF Number &quot;)) {
+//                    WDS.sampleResult.setResponseMessage(msg + &quot;(ID:&quot; + WDS.vars.get(&quot;MemberID&quot;) + &quot;)&quot;);
+//                    WDS.sampleResult.setSuccessful(false);
+                    logger.error(&quot;Error when disburse Member ID: &quot; + memberId);
+//                    break;
+                } else {
+//                    WDS.sampleResult.setResponseMessage(msg + &quot;(ID:&quot; + WDS.vars.get(&quot;MemberID&quot;) + &quot;)&quot;);
+//                    WDS.sampleResult.setSuccessful(false);
+                    System.out.println(&quot;Error when disburse Member ID: &quot; + memberId);
+//                    break;
+                }
+            } catch (Exception e) {
+                logger.error(&quot;Error when disburse loan!&quot;, e);
+            }
+        }
+
+Thread.sleep(30000);
+/////EnD///
+
+
+
+
+
+
+
+</stringProp>
+          <stringProp name="WebDriverSampler.parameters"></stringProp>
+          <stringProp name="WebDriverSampler.language">groovy</stringProp>
+        </com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
